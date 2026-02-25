@@ -1,0 +1,22 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+Vg = 5.0
+
+fs = 1000          
+T = 5              
+N = fs * T         
+t = np.linspace(0, T, N)
+
+Idc = 1e-6 * (1 + 0.2 * Vg)   
+
+noise_amplitude = 1e-8      
+fluctuations = noise_amplitude * np.random.randn(N)
+
+I_total = Idc + fluctuations
+
+plt.plot(t, fluctuations)
+plt.xlabel("Time (seconds)")
+plt.ylabel("Current Fluctuation (A)")
+plt.title("Current Fluctuations vs Time")
+plt.show()
