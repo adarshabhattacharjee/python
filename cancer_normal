@@ -9,9 +9,9 @@ Rs_h = 100
 Rm_h = 1000
 Cm_h = 1e-6
 
-Rs_c = 75
+Rs_c = 100
 Rm_c = 500
-Cm_c = 1.5e-6
+Cm_c = 0.75e-6
 
 def impedance(Rs, Rm, Cm):
     Z = Rs + 1 / (1/Rm + 1j * omega * Cm)
