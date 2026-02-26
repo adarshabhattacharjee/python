@@ -1,0 +1,31 @@
+# to differentiate between canceer and healthy cells as cancerous cells have less impedance (therefore filled in low values of resistance and capacitance)
+import numpy as np
+import matplotlib.pyplot as plt
+
+frequencies = np.logspace(2, 6, 100)
+omega = 2 * np.pi * frequencies
+
+Rs_h = 100
+Rm_h = 1000
+Cm_h = 1e-6
+
+Rs_c = 75
+Rm_c = 500
+Cm_c = 1.5e-6
+
+def impedance(Rs, Rm, Cm):
+    Z = Rs + 1 / (1/Rm + 1j * omega * Cm)
+    return Z
+
+Z_healthy = impedance(Rs_h, Rm_h, Cm_h)
+Z_cancer = impedance(Rs_c, Rm_c, Cm_c)
+
+
+plt.figure()
+plt.plot(Z_healthy.real, -Z_healthy.imag, label="Healthy")
+plt.plot(Z_cancer.real, -Z_cancer.imag, label="Cancer")
+plt.xlabel("Real(Z)")
+plt.ylabel("-Imag(Z)")
+plt.title("Healthy vs Cancer Cells")
+plt.legend()
+plt.show()
