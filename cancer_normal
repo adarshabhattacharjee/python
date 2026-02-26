@@ -1,4 +1,4 @@
-# to differentiate between canceer and healthy cells as cancerous cells have less impedance (therefore filled in low values of resistance and capacitance)
+# to differentiate between canceer and healthy cells as cancerous cells have less impedance (therefore filled in low values of resistance and capacitance and increased value of membrane capacitance)
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -11,7 +11,7 @@ Cm_h = 1e-6
 
 Rs_c = 100
 Rm_c = 500
-Cm_c = 0.75e-6
+Cm_c = 1.54e-6
 
 def impedance(Rs, Rm, Cm):
     Z = Rs + 1 / (1/Rm + 1j * omega * Cm)
