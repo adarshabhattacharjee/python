@@ -1,0 +1,44 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def generate_frequency_range():
+    return np.logspace(2, 5, 200)  # 100 Hz to 100 kHz
+
+def brain_impedance(frequencies, Rs, Rm, Cm):
+    omega = 2 * np.pi * frequencies
+    Z = Rs + 1 / (1 / Rm + 1j * omega * Cm)
+    return Z
+
+
+def add_noise(Z, noise_level=0.1):
+    noise_real = noise_level * np.random.normal(size=len(Z))
+    noise_imag = noise_level * np.random.normal(size=len(Z))
+    return Z + noise_real + 1j * noise_imag
+
+
+def plot_nyquist(Z_dict, title):
+    plt.figure(figsize=(8, 8))
+
+    for label, Z in Z_dict.items():
+        plt.plot(Z.real, -Z.imag, label=label)
+
+    plt.xlabel("Real(Z)")
+    plt.ylabel("-Imag(Z)")
+    plt.title(title)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+frequencies = generate_frequency_range()
+Z_healthy = brain_impedance(frequencies, Rs=200, Rm=1500, Cm=0.8e-6)
+Z_tumor = brain_impedance(frequencies, Rs=200, Rm=800, Cm=1e-6)
+Z_healthy_noisy = add_noise(Z_healthy)
+Z_tumor_noisy = add_noise(Z_tumor)
+
+plot_nyquist(
+    {
+        "Healthy Brain": Z_healthy_noisy,
+        "Tumor Tissue": Z_tumor_noisy
+    },
+    "Brain Tissue Impedance"
+)
