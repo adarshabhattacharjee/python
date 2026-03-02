@@ -1,0 +1,79 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+frequencies = np.logspace(2, 6, 200)
+omega = 2 * np.pi * frequencies
+
+Rs_h = 100
+Rm_h = 1000
+Cm_h = 1e-6
+
+
+Rs_c = 100
+Rm_c = 500
+Cm_c = 1.54e-6
+
+
+def impedance(Rs, Rm, Cm):
+    Z_parallel = 1 / (1/Rm + 1j * omega * Cm)
+    Z_total = Rs + Z_parallel
+    return Z_total
+
+
+Z_healthy = impedance(Rs_h, Rm_h, Cm_h)
+Z_cancer = impedance(Rs_c, Rm_c, Cm_c)
+
+
+plt.figure(figsize=(6,6))
+plt.plot(Z_healthy.real, -Z_healthy.imag, label="Healthy")
+plt.plot(Z_cancer.real, -Z_cancer.imag, label="Cancer")
+plt.xlabel("Real(Z) (Ohms)")
+plt.ylabel("-Imag(Z) (Ohms)")
+plt.title("Nyquist Plot: Healthy vs Cancer Tissue")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+
+plt.figure(figsize=(8,6))
+
+
+plt.subplot(2,1,1)
+plt.semilogx(frequencies, np.abs(Z_healthy), label="Healthy")
+plt.semilogx(frequencies, np.abs(Z_cancer), label="Cancer")
+plt.ylabel("|Z| (Ohms)")
+plt.title("Bode Plot - Magnitude")
+plt.legend()
+plt.grid(True)
+
+
+plt.subplot(2,1,2)
+plt.semilogx(frequencies, np.angle(Z_healthy, deg=True), label="Healthy")
+plt.semilogx(frequencies, np.angle(Z_cancer, deg=True), label="Cancer")
+plt.xlabel("Frequency (Hz)")
+plt.ylabel("Phase (Degrees)")
+plt.title("Bode Plot - Phase")
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+
+Rm_values = [1000, 500, 200]
+Cm_fixed = 1e-6
+Rs_fixed = 100
+
+plt.figure(figsize=(6,6))
+
+for Rm in Rm_values:
+    Z_var = impedance(Rs_fixed, Rm, Cm_fixed)
+    plt.plot(Z_var.real, -Z_var.imag, label=f"Rm = {Rm} Ohms")
+
+plt.xlabel("Real(Z) (Ohms)")
+plt.ylabel("-Imag(Z) (Ohms)")
+plt.title("Nyquist Plot - Sensitivity to Membrane Resistance")
+plt.legend()
+plt.grid(True)
+plt.show()
